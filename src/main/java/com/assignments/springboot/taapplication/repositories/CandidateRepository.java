@@ -4,5 +4,5 @@ import com.assignments.springboot.taapplication.models.Candidate;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CandidateRepository extends JpaRepository<Candidate, Integer> {
-    public Candidate getCandidateByCandId(int id);
+    public Candidate getCandidateById(int id);
 }

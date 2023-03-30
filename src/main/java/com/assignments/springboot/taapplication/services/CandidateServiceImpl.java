@@ -1,8 +1,10 @@
 package com.assignments.springboot.taapplication.services;
 
 import com.assignments.springboot.taapplication.models.Candidate;
+import com.assignments.springboot.taapplication.models.Interview;
 import com.assignments.springboot.taapplication.models.ResumeUpload;
 import com.assignments.springboot.taapplication.repositories.CandidateRepository;
+import com.assignments.springboot.taapplication.repositories.InterviewRepository;
 import com.assignments.springboot.taapplication.repositories.ResumeUploadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,12 +21,16 @@ public class CandidateServiceImpl implements CandidateService {
     ResumeUploadRepository resumeUploadRepository;
 
     @Autowired
+    InterviewRepository interviewRepository;
+
+    @Autowired
     CandidateRepository candidateRepository;
 
     @Override
-    public void addCandidate(Candidate candidate){
-        candidate.setResume(resumeUploadRepository.findFilenameByCandidateId(candidate.getCandId()));
+    public int addCandidate(Candidate candidate){
+        candidate.setResume(resumeUploadRepository.findFilenameByCandidateId(candidate.getId()));
         candidateRepository.save(candidate);
+        return candidate.getId();
     }
 
     @Override
@@ -34,15 +40,25 @@ public class CandidateServiceImpl implements CandidateService {
         ResumeUpload resumeUpload = new ResumeUpload(id,fileName, file.getBytes(), candidateId);
         id++;
         ResumeUpload res = resumeUploadRepository.save(resumeUpload);
-        Candidate candidate = candidateRepository.getCandidateByCandId(candidateId);
+        Candidate candidate = candidateRepository.getCandidateById(candidateId);
         candidate.setResume(fileName);
         candidateRepository.save(candidate);
     }
 
-    public List<Candidate> showCandidates(){
+    @Override
+    public Candidate showInterviewResultById(int id){
+        return candidateRepository.getCandidateById(id);
+    }
+
+    @Override
+    public List<Candidate> showAllCandidates(){
         List<Candidate> candidateList = new ArrayList<>();
         candidateRepository.findAll().forEach(candidateList::add);
         return candidateList;
     }
 
+    @Override
+    public Interview showInterviewDetailsById(int id) {
+        return interviewRepository.getInterviewByCandidateId(id);
+    }
 }

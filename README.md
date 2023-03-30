@@ -1,1 +1,1 @@
-# Talent Acquisistion Application using Spring Boot
+# Talent Acquisition Application using Spring Boot

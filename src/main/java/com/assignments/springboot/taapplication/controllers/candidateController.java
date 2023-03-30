@@ -1,5 +1,6 @@
 package com.assignments.springboot.taapplication.controllers;
 import com.assignments.springboot.taapplication.models.Candidate;
+import com.assignments.springboot.taapplication.models.Interview;
 import com.assignments.springboot.taapplication.models.ResumeUpload;
 import com.assignments.springboot.taapplication.services.CandidateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,18 +16,23 @@ public class candidateController {
     private CandidateService candidateService;
 
     @PostMapping
-    public void addCandidateDetails(@RequestBody Candidate candidate){
-        candidateService.addCandidate(candidate);
+    public int addCandidateDetails(@RequestBody Candidate candidate){
+        return candidateService.addCandidate(candidate);
     }
 
     @PostMapping("/{candidateId}")
-    public void addCandidate(@PathVariable int candidateId, @RequestParam("resume") MultipartFile resume) throws IOException {
+    public void addCandidateResume(@PathVariable int candidateId, @RequestParam("resume") MultipartFile resume) throws IOException {
         candidateService.resumeUpload(candidateId, resume);
     }
 
-    @GetMapping()
-    public List<Candidate> showCandidates(){
-        return candidateService.showCandidates();
+    @GetMapping("/{id}")
+    public Candidate showCandidates(@PathVariable int id){
+        return candidateService.showInterviewResultById(id);
+    }
+
+    @GetMapping("/interviewDetails/{id}")
+    public Interview showInterviewDetails(@PathVariable int id){
+        return candidateService.showInterviewDetailsById(id);
     }
 }
 
